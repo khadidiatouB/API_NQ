@@ -1,56 +1,26 @@
 const FashionProduct = require("../models/fashionProduct");
 
-// Example controller to get all fashion products
-
 const getAllFashionProducts = async (req, res) => {
 	try {
-		console.log("Fetching all fashion products...");
-
-		//const products = await FashionProduct.find();
-		//limit(10);
-		const products = await FashionProduct.find().limit(1);
-		console.log("Fetched products:", products);
-
+		console.log("Recuperation - fashion products...");
+		const products = await FashionProduct.find();
 		res.json(products);
 	} catch (error) {
-		console.error("Error fetching fashion products:", error);
+		console.error("Error Recuperation fashion products:", error);
 		res.status(500).send("Internal Server Error");
 	}
 };
 
-//find the first product
 const getFirstFashionProduct = async (req, res) => {
 	try {
 		const product = await FashionProduct.findOne();
 		res.json(product);
-		//res.json({ message: "Products" });
-	} catch (error) {
-		console.error(error);
-		res.status(500).send("Internal Server Error");
-	}
-};
-const getTest = async (req, res) => {
-	try {
-		res.json({ message: "Hello World" });
 	} catch (error) {
 		console.error(error);
 		res.status(500).send("Internal Server Error");
 	}
 };
 
-//
-// Récupérer tous les produits
-const getAllFashionProductsD = async (req, res) => {
-	try {
-		const products = await FashionProduct.find({});
-		res.json(products);
-	} catch (error) {
-		console.error("Error fetching fashion products:", error);
-		res.status(500).send("Internal Server Error");
-	}
-}; 
-
-// Récupérer un produit par son ID
 const getFashionProductById = async (req, res) => {
 	const productId = req.params.id;
 
@@ -63,12 +33,11 @@ const getFashionProductById = async (req, res) => {
 
 		res.json(product);
 	} catch (error) {
-		console.error("Error fetching fashion product by ID:", error);
+		console.error("Error Recuperation fashion product by ID:", error);
 		res.status(500).send("Internal Server Error");
 	}
 };
 
-// Ajouter un nouveau produit
 const addFashionProduct = async (req, res) => {
 	const newProductData = req.body;
 
@@ -78,12 +47,11 @@ const addFashionProduct = async (req, res) => {
 
 		res.status(201).json(newProduct);
 	} catch (error) {
-		console.error("Error adding fashion product:", error);
+		console.error("Error ajout fashion product:", error);
 		res.status(500).send("Internal Server Error");
 	}
 };
 
-// Mettre à jour un produit par son ID
 const updateFashionProductById = async (req, res) => {
 	const productId = req.params.id;
 	const updatedProductData = req.body;
@@ -106,7 +74,6 @@ const updateFashionProductById = async (req, res) => {
 	}
 };
 
-// Supprimer un produit par son ID
 const deleteFashionProductById = async (req, res) => {
 	const productId = req.params.id;
 
@@ -123,10 +90,12 @@ const deleteFashionProductById = async (req, res) => {
 		res.status(500).send("Internal Server Error");
 	}
 };
-
-//
 module.exports = {
 	getAllFashionProducts,
 	getFirstFashionProduct,
-	getTest,
+
+	getFashionProductById,
+	addFashionProduct,
+	updateFashionProductById,
+	deleteFashionProductById,
 };

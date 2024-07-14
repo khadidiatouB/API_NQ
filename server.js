@@ -1,42 +1,32 @@
 const express = require("express");
 const connectDB = require("./config/database");
+const cors = require("cors");
+
 const fashionProductRoutes = require("./routes/fashionProductRoutes");
+
 const PORT = process.env.PORT || 3000;
-const swaggerJsdoc = require("swagger-jsdoc");
+
 const swaggerUi = require("swagger-ui-express");
 const app = express();
-
+const morgan = require("morgan");
 const YAML = require("yamljs");
 const swaggerDocument = YAML.load("./config/swagger.yaml");
+const bodyParser = require("body-parser");
 
-//
-
-// Middleware
-const LoggerMiddleware = (req, res, next) => {
-	console.log(`Logged  ${req.url} ${req.method} -- ${new Date()}`);
-	console.log(`Tested ✅`);
-	//pour passer au middleware suivant
-	// res.json({ message: "Hello World" });
-	next();
-};
-// app.use(cors());
-// app.use(bodyParser.json());
-
-// utilisation de la fonction middleware
-app.use(LoggerMiddleware);
+app.use(cors());
+app.use(morgan("common"));
+app.use(bodyParser.json());
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json({ extended: false }));
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// Appel pour établir la connexion à la base de données
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use("/", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 connectDB();
 
-app.use("/", fashionProductRoutes);
+app.use("/api/v1/", fashionProductRoutes);
 
-// Start the server
 app.listen(PORT, () => {
-	console.log(
-		`Server is running and listening on port  http://localhost:${PORT}`
-	);
+	console.log(` Démarrage du serveur sur le port  http://localhost:${PORT}`);
 });

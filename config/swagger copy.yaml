@@ -3,7 +3,7 @@ info:
   version: 1.0.0
   title: Projet NoSQL 
   description: Application de gestion de produits de mode avec NodeJS et MongoDB
-host: localhost:3000/api/v1
+host: localhost:3000
 basePath: /
 schemes:
   - http
@@ -52,36 +52,8 @@ paths:
             $ref: '#/definitions/FashionProduct'
         404:
           description: Aucun produit de mode trouvé avec l'ID spécifié
-    delete:
-      summary: Supprimer un produit de mode par ID
-      description: Supprime un produit de mode spécifié par son ID.
-      parameters:
-        - name: id
-          in: path
-          description: L'ID du produit de mode
-          required: true
-          type: string
-      responses:
-        200:
-          description: Le produit de mode a été supprimé avec succès
-          schema:
-            $ref: '#/definitions/FashionProduct'
-        404:
-          description: Aucun produit de mode trouvé avec l'ID spécifié
-  /categories:
-    get:
-      summary: Récupérer la liste des catégoriea
-      description: Récupère les categories .
-      responses:
-        200:
-          description: Une liste des categories de mode
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/FashionProduct'
-        404:
-          description: Aucun categories de mode trouvé pour la base de donnees
-  /categories/{category}:
+
+  /products/category/{category}:
     get:
       summary: Récupérer les produits d'une catégorie spécifique
       description: Récupère les produits de mode appartenant à une catégorie spécifique.
@@ -101,20 +73,7 @@ paths:
         404:
           description: Aucun produit de mode trouvé pour la catégorie spécifiée
 
-  /brands/:
-    get:
-      summary: Récupérer les marques
-      description: Récupère les marque.
-      responses:
-        200:
-          description: Une liste des marques de mode
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/FashionProduct'
-        404:
-          description: Aucun marque de mode trouvé pour la base de donnees
-  /brands/{brand}:
+  /products/brand/{brand}:
     get:
       summary: Récupérer les produits d'une marque spécifique
       description: Récupère les produits de mode d'une marque spécifique.
@@ -134,7 +93,7 @@ paths:
         404:
           description: Aucun produit de mode trouvé pour la marque spécifiée
 
-  /onSale:
+  /products/onSale:
     get:
       summary: Récupérer les produits en promotion
       description: Récupère les produits de mode actuellement en promotion.
@@ -146,7 +105,7 @@ paths:
             items:
               $ref: '#/definitions/FashionProduct'
 
-  /categories/{category}/averageRating:
+  /products/category/{category}/averageRating:
     get:
       summary: Calculer la moyenne des évaluations pour une catégorie donnée
       description: Calcule et renvoie la moyenne des évaluations des produits de mode de la catégorie spécifiée.
@@ -166,7 +125,7 @@ paths:
                 type: number
                 format: float
 
-  /bestRated:
+  /products/bestRated:
     get:
       summary: Récupérer les produits avec la meilleure évaluation
       description: Renvoie les produits de mode avec la meilleure évaluation globale.
@@ -178,7 +137,7 @@ paths:
             items:
               $ref: '#/definitions/FashionProduct'
 
-  /count:
+  /products/count:
     get:
       summary: Récupérer le nombre total de produits
       description: Récupère le nombre total de produits de mode enregistrés dans la base de données.
@@ -191,7 +150,35 @@ paths:
               count:
                 type: integer
 
+  /products/sortedByDiscount:
+    get:
+      summary: Récupérer les produits triés par ordre de réduction
+      description: Renvoie les produits de mode triés par pourcentage de réduction décroissant.
+      responses:
+        200:
+          description: Une liste de produits de mode triés par ordre de réduction
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/FashionProduct'
 
+  /products/discountGreaterThan/{percentage}:
+    get:
+      summary: Récupérer les produits avec une réduction supérieure à un certain pourcentage
+      description: Renvoie les produits de mode avec une réduction supérieure à un pourcentage spécifié.
+      parameters:
+        - name: percentage
+          in: path
+          description: Le pourcentage de réduction spécifié
+          required: true
+          type: number
+      responses:
+        200:
+          description: Une liste de produits de mode avec une réduction supérieure au pourcentage spécifié
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/FashionProduct'
 
 definitions:
   FashionProduct:
@@ -261,3 +248,4 @@ definitions:
         type: string
       color:
         type: string
+
